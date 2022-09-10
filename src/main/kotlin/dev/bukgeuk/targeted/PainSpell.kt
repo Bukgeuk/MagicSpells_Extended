@@ -18,9 +18,10 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause
 import java.lang.NumberFormatException
 import java.util.*
 
-class ImprovedPainSpell(config: MagicConfig?, private val spellName: String?) : TargetedSpell(config, spellName), TargetedEntitySpell, DamageSpell {
+class PainSpell(config: MagicConfig?, spellName: String?) : TargetedSpell(config, spellName), TargetedEntitySpell, DamageSpell {
     private val spellDamageType = getConfigString("spell-damage-type", "")
     private val defaultDamage: Double
+    private val multiplier: Double
     private var damageType: DamageCause? = null
     private val damageExpression: String
     private val ignoreArmor: Boolean
@@ -79,14 +80,15 @@ class ImprovedPainSpell(config: MagicConfig?, private val spellName: String?) : 
         } else if (target.isDead) {
             false
         } else {
-            val damage = if (damageExpression == "" || caster !is Player) defaultDamage else {
+            var damage = if (damageExpression == "" || caster !is Player) defaultDamage else {
                try {
                    MagicSpells.doVariableReplacements(caster, damageExpression).toDouble()
                } catch (e: NumberFormatException) {
-                   MagicSpells.error("ImprovedPainSpell '$spellName' has invalid damage expression")
+                   MagicSpells.error("PainSpell(Extended) '${this.internalName}' has invalid damage expression")
                    defaultDamage
                }
             }
+            damage *= multiplier
 
             var localDamage = damage * power.toDouble()
             if (checkPlugins) {
@@ -144,6 +146,7 @@ class ImprovedPainSpell(config: MagicConfig?, private val spellName: String?) : 
             DamageCause.ENTITY_ATTACK
         }
         defaultDamage = getConfigDouble("default-damage", 4.0)
+        multiplier = getConfigDouble("multiplier", 1.0)
         damageExpression = getConfigString("damage-expression", "")
         ignoreArmor = getConfigBoolean("ignore-armor", false)
         checkPlugins = getConfigBoolean("check-plugins", true)
