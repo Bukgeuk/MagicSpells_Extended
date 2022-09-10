@@ -10,8 +10,8 @@ import kotlin.math.min
 
 class MultipleParticleProjectileSpell(config: MagicConfig?, spellName: String?): InstantSpell(config, spellName) {
     private var PPSpell: ParticleProjectileSpell? = null
-    private val horizontalRotations: List<Double> = try {
-        getConfigStringList("horizontal-rotations", emptyList<String>()).map { it.toDouble() }
+    private val horizontalRotations: List<Float> = try {
+        getConfigStringList("horizontal-rotations", emptyList<String>()).map { it.toFloat() }
     } catch (e: NumberFormatException) {
         MagicSpells.error("MultipleParticleProjectileSpell(Extended) '${this.internalName}' has invalid horizontal rotations")
         emptyList()
@@ -38,7 +38,7 @@ class MultipleParticleProjectileSpell(config: MagicConfig?, spellName: String?):
     override fun castSpell(caster: LivingEntity?, state: SpellCastState?, power: Float, args: Array<out String>?): PostCastAction {
         if (PPSpell != null) {
             for (i in 0 until min(horizontalRotations.count(), verticalRotations.count())) {
-                PPSpell!!.horizontalRotation = horizontalRotations[i]
+                PPSpell!!.projectileHorizOffset = horizontalRotations[i]
                 PPSpell!!.setVerticalRotation(verticalRotations[i])
                 PPSpell!!.castSpell(caster, state, power, args)
             }
