@@ -11,10 +11,14 @@ class InitSpell(config: MagicConfig?, spellName: String?) : Spell(config, spellN
     private val defenseConstant = getConfigDouble("defense-constant", 150.0)
     private val defenseVariableName = getConfigString("defense-variable", "")
     private val healthScale = getConfigDouble("health-scale", 20.0)
+    private val atkVariableName = getConfigString("atk-variable", "")
+    private val agiVariableName = getConfigString("agi-variable", "")
+    private val atkIncreaseGap = getConfigDouble("atk-increase-gap", 0.0)
+    private val agiGap = getConfigDouble("agi-gap", 0.0)
 
     init {
         MagicSpells.registerEvents(DamageEventHandler(defenseVariableName, defenseConstant))
-        MagicSpells.registerEvents(ConnectionEventHandler(healthScale))
+        MagicSpells.registerEvents(ConnectionEventHandler(healthScale, atkVariableName, atkIncreaseGap, agiVariableName, agiGap))
     }
 
     override fun castSpell(p0: LivingEntity?, p1: SpellCastState?, p2: Float, p3: Array<out String>?): PostCastAction {
