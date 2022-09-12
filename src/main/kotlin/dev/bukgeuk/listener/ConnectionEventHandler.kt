@@ -31,8 +31,8 @@ class ConnectionEventHandler(private val healthScale: Double,
 
         if (scale.getValue(p) != healthScale) scale.set(p, healthScale)
 
-        hp.set(p, hp.getValue(p) + hpValue)
-        atk.set(p, atk.getValue(p) + atkValue)
-        agi.set(p, agi.getValue(p) + agiValue)
+        hp.set(p, 20 + hpValue)
+        atk.set(p, 1 + atkValue)
+        agi.set(p, 0.1 + agiValue)
     }
 }
