@@ -15,6 +15,7 @@ import org.bukkit.EntityEffect
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause
+import org.mariuszgromada.math.mxparser.Expression
 import java.lang.NumberFormatException
 import java.util.*
 
@@ -82,7 +83,7 @@ class PainSpell(config: MagicConfig?, spellName: String?) : TargetedSpell(config
         } else {
             var damage = if (damageExpression == "" || caster !is Player) defaultDamage else {
                try {
-                   MagicSpells.doVariableReplacements(caster, damageExpression).toDouble()
+                   Expression(MagicSpells.doVariableReplacements(caster, damageExpression)).calculate()
                } catch (e: NumberFormatException) {
                    MagicSpells.error("PainSpell(Extended) '${this.internalName}' has invalid damage expression")
                    defaultDamage
