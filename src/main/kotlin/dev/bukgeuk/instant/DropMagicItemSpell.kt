@@ -105,7 +105,7 @@ class DropMagicItemSpell(config: MagicConfig?, spellName: String?): InstantSpell
         rand = getRandomDouble(minAtk, maxAtk, 2)
         if (rand != 0.0) {
             map.put(Attribute.GENERIC_ATTACK_DAMAGE, AttributeModifier("generic.attack_damage", rand, stringToOperation(atkOperation)))
-            lore.add(generateComponent(rand, atkOperation, "공격력"))
+            lore.add(generateComponent(rand, atkOperation, "물리 공격력"))
         }
 
         rand = getRandomDouble(minMatk, maxMatk, 2)
